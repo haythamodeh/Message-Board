@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+    <title>Register-Login</title>
+    <style>
+        .registerform, .loginform, .error {
+            color: red;
+        }
+        .success {
+            color: green;
+        }
+        li {
+            list-style: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="jumbotron text-center">
+            <h1>Login And Registration</h1>
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        {% if message.tags == "success success" %}
+                            <li class="{{message.tags}}">{{ message }}</li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        {% if message.tags == "error" %}
+                            <li class="{{message.tags}}">{{ message }}</li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        <div class="row">
+                <div class="col-md-6">
+                    <h1 class="text-center">Register</h1>
+                    {% if messages %}
+                        <ul class="messages">
+                            {% for message in messages %}
+                                {% if message.tags == "registerform error" %}
+                                    <li class="{{message.tags}}">{{ message }}</li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    <form action="/registerProcess" method="POST" class="form">  
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="firstname">First Name</label>
+                            <input type="text" class="form-control" name="firstName">
+                        </div>
+                        <div class="form-group">
+                            <label for="lastname">Last Name</label>
+                            <input type="text" class="form-control" name="lastName">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="text" class="form-control" name="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="text" class="form-control" name="pw">
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmpassword">Confirm Password</label>
+                            <input type="text" class="form-control" name="confirmpassword">
+                        </div>
+                        <input type="submit" value="Register" class="btn btn-success">
+                    </form>
+                </div>
+                <div class="col-md-6">
+                    <h1 class="text-center">Login</h1>
+                    {% if messages %}
+                        <ul class="messages">
+                            {% for message in messages %}
+                                {% if message.tags == "loginform error" %}
+                                    <li class="{{message.tags}}">{{ message }}</li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    <form action="/loginProcess" method="POST"> 
+                        {% csrf_token %}  
+                        <div class="form-group">
+                            <label for="emaillogin">Email</label>
+                            <input type="text" class="form-control" name="emaillogin">
+                        </div>
+                        <div class="form-group">
+                            <label for="passwordlogin">Password</label>
+                            <input type="text" class="form-control" name="passwordlogin">
+                        </div>
+                        <input type="submit" value="Log In" class="btn btn-success">
+                    </form>
+                </div>
+           
+        </div>
+    </div>
+</body>
+</html>

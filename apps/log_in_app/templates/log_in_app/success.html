@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+    <title>Success</title>
+
+    <style>
+        .success {
+            color: green;
+        }
+        li {
+            list-style: none;
+        }
+        h4 {
+            display: inline-block;
+        }
+        a {
+            float: right;
+        }
+        h5 {
+            font-size: 18px;
+        }
+        .msg {
+            margin-left: 25px;
+        }
+        .comment {
+            margin-left: 50px;
+        }
+        .usercomment {
+            margin-left: 25px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="jumbotron">
+            <h4>Success! Welcome, {{ user.firstName }}</h4>
+            <a href="/logout" class="btn btn-danger">Log Out</a>
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        {% if message.tags == "success success" %}
+                            <li class="{{message.tags}}">{{ message }}</li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            {% endif %}       
+        </div>
+        <form action="postMessageProcess" method="POST" class="form">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="message">Post a message</label>
+                <textarea name="message" class="form-control"></textarea>
+            </div>
+            <input type="submit" value="Post a message" class="btn btn-primary">
+        </form>
+        <hr>
+        <div class="jumbotron">
+            <h4 class="mb-5">Messages</h4>
+            {% for msg in messageObject %}
+                {% for user in msg.users.all %}
+                    <h5 class="text-success">{{ user.firstName }} {{ user.lastName }} - {{ msg.created_at }}</h5>
+                {% endfor %}
+                <p class="msg">{{ msg.msg }}</p>
+                {% for comment in msg.comments.all %}
+                    
+                    {% for c in comment.users.all %}
+                    <h6 class="text-info usercomment">{{ c.firstName }} {{ c.lastName  }} - {{ comment.created_at }}</h6>
+                    {% endfor %}
+
+                    
+                    <p class="comment">{{ comment.comment }}</p>
+                {% endfor %}
+                <form action="postCommentProcess" method="POST" class="form">
+                    {% csrf_token %}
+                    <input type="hidden" name="msg_id" value="{{msg.id}}">
+                    <div class="form-group">
+                        <label for="comment">Post a comment</label>
+                        <textarea name="comment" class="form-control"></textarea>
+                    </div>
+                    <input type="submit" value="Post a comment" class="btn btn-success">
+                </form>
+                <hr>
+            {% endfor %}
+        </div>
+
+    </div>
+</body>
+</html>
